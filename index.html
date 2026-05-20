@@ -4,330 +4,185 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Entrata Time Zones</title>
-  <meta name="description" content="Current time across Entrata offices: Utah, India, Israel, and Amsterdam." />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕒</text></svg>" />
   <style>
     :root {
-      --bg: #f6f8fb;
-      --card-bg: #ffffff;
-      --border: #e6eaf0;
+      --bg: #ffffff;
+      --border: #e8ecf2;
       --text: #0f172a;
       --muted: #64748b;
       --accent: #2563eb;
-      --accent-soft: #eff4ff;
-      --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 12px rgba(15, 23, 42, 0.04);
-      --radius: 14px;
-      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-        Arial, "Noto Sans", sans-serif;
+      --divider: #f1f4f8;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
 
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0b1220;
-        --card-bg: #111a2e;
-        --border: #1f2a44;
-        --text: #e6edf7;
-        --muted: #94a3b8;
-        --accent: #60a5fa;
-        --accent-soft: #16244a;
-        --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 18px rgba(0, 0, 0, 0.25);
-      }
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
-      margin: 0;
-      padding: 0;
+    html, body {
+      height: 100%;
       background: var(--bg);
       color: var(--text);
       font-family: var(--font);
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
     }
 
-    .page {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 32px 20px 40px;
+    .widget {
+      padding: 18px 20px 14px;
     }
 
     .header {
-      width: 100%;
-      max-width: 1080px;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      margin-bottom: 24px;
-    }
-
-    .title {
       display: flex;
       align-items: center;
-      gap: 10px;
-      font-size: 22px;
-      font-weight: 650;
-      letter-spacing: -0.01em;
-      margin: 0;
+      gap: 8px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .title-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: var(--accent);
-      box-shadow: 0 0 0 4px var(--accent-soft);
+    .header-icon {
+      font-size: 15px;
+      line-height: 1;
     }
 
-    .subtitle {
-      margin: 6px 0 0 20px;
+    .header-title {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
       color: var(--muted);
-      font-size: 13.5px;
     }
 
-    .grid {
-      width: 100%;
-      max-width: 1080px;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 16px;
-    }
-
-    @media (max-width: 900px) {
-      .grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (max-width: 480px) {
-      .grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .card {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px 20px 18px;
-      box-shadow: var(--shadow);
+    .list {
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      gap: 0;
     }
 
-    .card:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 2px 4px rgba(15, 23, 42, 0.05), 0 10px 24px rgba(15, 23, 42, 0.06);
-    }
-
-    .card-top {
+    .row {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      padding: 11px 0;
+      border-bottom: 1px solid var(--divider);
     }
 
-    .location {
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .row-left {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
     .flag {
-      font-size: 22px;
+      font-size: 18px;
       line-height: 1;
+      flex-shrink: 0;
     }
 
-    .place {
+    .location {
       display: flex;
       flex-direction: column;
+      gap: 1px;
     }
 
-    .place-name {
-      font-size: 14.5px;
+    .location-name {
+      font-size: 14px;
       font-weight: 600;
-      letter-spacing: -0.005em;
+      color: var(--text);
     }
 
-    .place-region {
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    .offset {
+    .location-region {
       font-size: 11px;
-      font-weight: 600;
-      color: var(--accent);
-      background: var(--accent-soft);
-      padding: 4px 8px;
-      border-radius: 999px;
-      letter-spacing: 0.02em;
+      color: var(--muted);
+    }
+
+    .row-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 2px;
     }
 
     .time {
+      font-size: 15px;
+      font-weight: 600;
       font-variant-numeric: tabular-nums;
-      font-feature-settings: "tnum";
-      font-size: 34px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.1;
+      letter-spacing: -0.01em;
+      color: var(--text);
     }
 
-    .time .seconds {
-      font-size: 18px;
-      font-weight: 500;
+    .time-meta {
+      font-size: 11px;
       color: var(--muted);
-      margin-left: 2px;
-    }
-
-    .time .meridiem {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--muted);
-      margin-left: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .date {
-      font-size: 13px;
-      color: var(--muted);
-    }
-
-    .footer {
-      margin-top: 28px;
-      color: var(--muted);
-      font-size: 12px;
-      text-align: center;
     }
   </style>
 </head>
 <body>
-  <main class="page">
-    <header class="header">
-      <h1 class="title">
-        <span class="title-dot" aria-hidden="true"></span>
-        Entrata Time Zones
-      </h1>
-      <p class="subtitle">Current local time across our offices</p>
-    </header>
-
-    <section class="grid" id="grid" aria-live="polite"></section>
-
-    <p class="footer">Updates automatically · Times reflect each location's local clock</p>
-  </main>
+  <div class="widget">
+    <div class="header">
+      <span class="header-icon">🕒</span>
+      <span class="header-title">Entrata Time Zones</span>
+    </div>
+    <div class="list" id="list"></div>
+  </div>
 
   <script>
     const LOCATIONS = [
-      {
-        name: "Utah",
-        region: "Lehi, USA",
-        flag: "🇺🇸",
-        timeZone: "America/Denver",
-      },
-      {
-        name: "India",
-        region: "Pune",
-        flag: "🇮🇳",
-        timeZone: "Asia/Kolkata",
-      },
-      {
-        name: "Israel",
-        region: "Tel Aviv",
-        flag: "🇮🇱",
-        timeZone: "Asia/Jerusalem",
-      },
-      {
-        name: "Amsterdam",
-        region: "Netherlands",
-        flag: "🇳🇱",
-        timeZone: "Europe/Amsterdam",
-      },
+      { name: "Utah",      region: "Lehi, USA",    flag: "🇺🇸", timeZone: "America/Denver"    },
+      { name: "India",     region: "Pune",          flag: "🇮🇳", timeZone: "Asia/Kolkata"      },
+      { name: "Israel",    region: "Tel Aviv",      flag: "🇮🇱", timeZone: "Asia/Jerusalem"    },
+      { name: "Amsterdam", region: "Netherlands",   flag: "🇳🇱", timeZone: "Europe/Amsterdam"  },
     ];
 
-    function getTimeParts(timeZone, date) {
-      const fmt = new Intl.DateTimeFormat("en-US", {
+    function formatTime(timeZone, date) {
+      return new Intl.DateTimeFormat("en-US", {
         timeZone,
         hour: "numeric",
         minute: "2-digit",
-        second: "2-digit",
         hour12: true,
-      });
-      const parts = fmt.formatToParts(date);
-      const lookup = {};
-      for (const p of parts) lookup[p.type] = p.value;
-      return {
-        hour: lookup.hour || "",
-        minute: lookup.minute || "",
-        second: lookup.second || "",
-        meridiem: (lookup.dayPeriod || "").toLowerCase(),
-      };
+      }).format(date);
     }
 
-    function getDateLabel(timeZone, date) {
+    function formatDay(timeZone, date) {
       return new Intl.DateTimeFormat("en-US", {
         timeZone,
-        weekday: "long",
-        month: "long",
+        weekday: "short",
+        month: "short",
         day: "numeric",
       }).format(date);
     }
 
-    function getUtcOffset(timeZone, date) {
-      const fmt = new Intl.DateTimeFormat("en-US", {
-        timeZone,
-        timeZoneName: "shortOffset",
-      });
-      const parts = fmt.formatToParts(date);
-      const tz = parts.find((p) => p.type === "timeZoneName");
-      if (!tz) return "";
-      return tz.value.replace("GMT", "UTC");
-    }
-
-    function buildCards() {
-      const grid = document.getElementById("grid");
-      grid.innerHTML = "";
+    function buildList() {
+      const list = document.getElementById("list");
       for (const loc of LOCATIONS) {
-        const card = document.createElement("article");
-        card.className = "card";
-        card.dataset.tz = loc.timeZone;
-        card.innerHTML = `
-          <div class="card-top">
+        const row = document.createElement("div");
+        row.className = "row";
+        row.dataset.tz = loc.timeZone;
+        row.innerHTML = `
+          <div class="row-left">
+            <span class="flag">${loc.flag}</span>
             <div class="location">
-              <span class="flag" aria-hidden="true">${loc.flag}</span>
-              <div class="place">
-                <span class="place-name">${loc.name}</span>
-                <span class="place-region">${loc.region}</span>
-              </div>
+              <span class="location-name">${loc.name}</span>
+              <span class="location-region">${loc.region}</span>
             </div>
-            <span class="offset" data-role="offset"></span>
           </div>
-          <div class="time" data-role="time"></div>
-          <div class="date" data-role="date"></div>
+          <div class="row-right">
+            <span class="time" data-role="time"></span>
+            <span class="time-meta" data-role="day"></span>
+          </div>
         `;
-        grid.appendChild(card);
+        list.appendChild(row);
       }
     }
 
     function render() {
       const now = new Date();
-      const cards = document.querySelectorAll(".card");
-      cards.forEach((card) => {
-        const tz = card.dataset.tz;
-        const { hour, minute, second, meridiem } = getTimeParts(tz, now);
-        card.querySelector('[data-role="time"]').innerHTML =
-          `${hour}:${minute}` +
-          `<span class="seconds">:${second}</span>` +
-          `<span class="meridiem">${meridiem}</span>`;
-        card.querySelector('[data-role="date"]').textContent = getDateLabel(tz, now);
-        card.querySelector('[data-role="offset"]').textContent = getUtcOffset(tz, now);
+      document.querySelectorAll(".row").forEach((row) => {
+        const tz = row.dataset.tz;
+        row.querySelector('[data-role="time"]').textContent = formatTime(tz, now);
+        row.querySelector('[data-role="day"]').textContent = formatDay(tz, now);
       });
     }
 
@@ -335,14 +190,12 @@
       render();
       const tick = () => {
         render();
-        const ms = 1000 - (Date.now() % 1000);
-        setTimeout(tick, ms);
+        setTimeout(tick, 1000 - (Date.now() % 1000));
       };
-      const ms = 1000 - (Date.now() % 1000);
-      setTimeout(tick, ms);
+      setTimeout(tick, 1000 - (Date.now() % 1000));
     }
 
-    buildCards();
+    buildList();
     startClock();
   </script>
 </body>
